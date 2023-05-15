@@ -27,9 +27,13 @@ public class main {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());		}
 		
-		insertStudent("Mario", "Rossi", "M", 5, 1, 10);
-		insertStudent("Maria", "Verdi", "F", 5, 1, 10);
-		insertStudent("Pippo", "Bianco", "M", 5, 1, 10);
+		//insertStudent("Mario", "Rossi", "M", 5, 1, 10);
+		//insertStudent("Maria", "Verdi", "F", 5, 1, 10);
+		//insertStudent("Pippo", "Bianco", "M", 5, 1, 10);
+		//deleteStudent(6);
+		getBest();
+		getVoteRange(5,10);
+		
 	}
 	
 	public static void insertStudent(String name, String lastname, String gender, int avg, int min_vote, int max_vote) {
@@ -50,6 +54,62 @@ public class main {
 	}
 	
 	public static void updateStudent(int id, HashMap<String, Object> s) {
-		
+		String sqlUpdateOne = "UPDATE school_students SET id=? WHERE id = ?";
+		try {
+			PreparedStatement stmtUpdateOne = conn.prepareStatement(sqlUpdateOne);
+			stmtUpdateOne.setInt(1, 17);
+			stmtUpdateOne.setInt(2, 5);
+			stmtUpdateOne.execute();
+			System.out.println("ID modificato!");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void deleteStudent(int id) {
+		String sqlDeleteOne = "DELETE FROM school_students WHERE id = ?";
+		try {
+			PreparedStatement stmtDeleteOne = conn.prepareStatement(sqlDeleteOne);
+			stmtDeleteOne.setInt(1, id);
+			stmtDeleteOne.execute();
+			System.out.println("Studente eliminato!");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void getBest() {
+		String sqlSelect = "SELECT MAX(avg) AS avg FROM school_students";
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet best = stmt.executeQuery(sqlSelect);
+			while (best.next()) {
+				System.out.println("AVG: " + best.getInt("avg"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void getVoteRange(int min, int max) {
+		String sqlSelect = "SELECT * FROM school_students WHERE min_vote >= ? AND max_vote <= ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sqlSelect);
+			pstmt.setInt(1, min);
+			pstmt.setInt(2, max);
+			ResultSet result = pstmt.executeQuery();
+			
+			while (result.next()) {
+				System.out.println("Name: " + result.getString("name") 
+				+ ", Lastname: " + result.getString("lastname") 
+				+ ", ID: " + result.getInt("id") 
+				+ ", Gender: " + result.getString("gender")
+				+ ", AVG: " + result.getInt("avg")
+				+ ", Min Vote: " + result.getInt("min_vote")
+				+ ", Max Vote: " + result.getInt("max_vote"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
