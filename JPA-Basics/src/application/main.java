@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 
 public class main {
 	static Connection conn = null;
@@ -16,7 +17,7 @@ public class main {
 		
 		String url = "jdbc:postgresql://localhost:5432/dbIntro?useSSL=false";
 		String username = "postgres";
-		String password = "GorasSU94";
+		String password = "1234";
 		
 		try {
 			System.out.println("Connecting to PG...");
@@ -27,6 +28,8 @@ public class main {
 			System.out.println(e.getMessage());		}
 		
 		insertStudent("Mario", "Rossi", "M", 5, 1, 10);
+		insertStudent("Maria", "Verdi", "F", 5, 1, 10);
+		insertStudent("Pippo", "Bianco", "M", 5, 1, 10);
 	}
 	
 	public static void insertStudent(String name, String lastname, String gender, int avg, int min_vote, int max_vote) {
@@ -42,8 +45,11 @@ public class main {
 			stmt.execute();
 			System.out.println("Studente inserito!");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public static void updateStudent(int id, HashMap<String, Object> s) {
+		
 	}
 }
