@@ -27,15 +27,39 @@ public class main {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());		}
 		
+		HashMap <String, Object> prova = new HashMap<>();
+		prova.put("name", "Pippo");
+		prova.put("lastname", "Pippo");
+		prova.put("gender", "P");
+		prova.put("avg", 10);
+		prova.put("min_vote", 10);
+		prova.put("max_vote", 10);
 		//insertStudent("Mario", "Rossi", "M", 5, 1, 10);
 		//insertStudent("Maria", "Verdi", "F", 5, 1, 10);
 		//insertStudent("Pippo", "Bianco", "M", 5, 1, 10);
 		//deleteStudent(6);
 		getBest();
 		getVoteRange(5,10);
-		
+		updateStudent(2, prova);
 	}
-	
+		public static void updateStudent(int id, HashMap<String, Object> s) {
+		String sqlUpdateOne = "UPDATE school_students SET name=?, lastname=?, gender=?, avg=?, min_vote=?, max_vote=? WHERE id = ?";
+		try {
+			PreparedStatement stmtUpdateOne = conn.prepareStatement(sqlUpdateOne);
+			stmtUpdateOne.setObject(1, s.get("name"));
+			stmtUpdateOne.setObject(2, s.get("lastname"));
+			stmtUpdateOne.setObject(3, s.get("gender"));
+			stmtUpdateOne.setObject(4, s.get("avg"));
+			stmtUpdateOne.setObject(5, s.get("min_vote"));
+			stmtUpdateOne.setObject(6, s.get("max_vote"));
+			stmtUpdateOne.setInt(7, id);
+			stmtUpdateOne.execute();
+			System.out.println("Studente modificato!");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+		
 	public static void insertStudent(String name, String lastname, String gender, int avg, int min_vote, int max_vote) {
 		String sqlInsert = "INSERT INTO school_students (name ,lastname, gender, avg, min_vote, max_vote) VALUES(?, ?, ?, ?, ?, ?)";
 		try {
@@ -53,18 +77,7 @@ public class main {
 		}
 	}
 	
-	public static void updateStudent(int id, HashMap<String, Object> s) {
-		String sqlUpdateOne = "UPDATE school_students SET id=? WHERE id = ?";
-		try {
-			PreparedStatement stmtUpdateOne = conn.prepareStatement(sqlUpdateOne);
-			stmtUpdateOne.setInt(1, 17);
-			stmtUpdateOne.setInt(2, 5);
-			stmtUpdateOne.execute();
-			System.out.println("ID modificato!");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+
 	
 	public static void deleteStudent(int id) {
 		String sqlDeleteOne = "DELETE FROM school_students WHERE id = ?";
